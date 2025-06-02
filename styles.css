@@ -11,20 +11,47 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: end;
+    align-items: center;
     background-color: gainsboro;
+    border: 8px solid black;
+    padding: 4px;
+}
+
+.display-row {
+    width: 100%;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    /* gap: 4px; */
 }
 
 #display {
+    height: 110px;
     font-size: 72px;
+    box-sizing: border-box;
+    width: 100%;
+    border: 8px solid palevioletred;
+    text-align: right;
+    padding: 4px;
+    margin-bottom: 8px;
+    background-color: white;
 }
 
 button {
     height: 100px;
     width: 100px;
-    font-size: 20px;
+    font-size: 32px;
+    /* border: 1px solid black;s */
+    /* background-color: white; */
 }
 
 .long {
     width: 200px;
+}
+
+#ans, #neg, #decimal {
+    background-color: lightcoral;
+    border: 1px solid black;
 }

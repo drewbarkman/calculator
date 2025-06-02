@@ -32,3 +32,41 @@ function operate(num1, operator, num2) {
 let operator = '+';
 let num1 = '';
 let num2 = '';
+
+const display = document.querySelector('#display');
+const num_buttons = document.querySelectorAll('.num');
+const clear_button = document.querySelector('#clear');
+const operator_buttons = document.querySelectorAll('.operator');
+const solve = document.querySelector('#solve');
+
+function updateDisplay(numString) {
+    display.textContent += numString;
+}
+
+function clearDisplay() {
+    display.textContent = '';
+}
+
+num_buttons.forEach((button) => {
+    button.addEventListener('click', () => {
+        updateDisplay(button.textContent);
+    })
+});
+
+clear_button.addEventListener('click', () => {
+    clearDisplay();
+});
+
+operator_buttons.forEach((button) => {
+    button.addEventListener('click', () => {
+        num1 = parseFloat(display.textContent);
+        operator = button.textContent;
+        clearDisplay();
+    });
+})
+
+solve.addEventListener('click', () => {
+    num2 = parseFloat(display.textContent);
+    answer = operate(num1, operator, num2);
+    display.textContent = answer;
+})
