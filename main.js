@@ -16,20 +16,35 @@ function divide(a, b) {
 }
 
 function operate(num1, operator, num2) {
+    let answer = NaN;
     switch (operator) {
         case '+':
-            return add(num1, num2);
+            answer = add(num1, num2);
+            break;
         case '–':
-            return subtract(num1, num2);
+            answer = subtract(num1, num2);
+            break;
         case 'x':
-            return multiply(num1, num2);
+            answer = multiply(num1, num2);
+            break;
         case '÷':
-            return divide(num1, num2);
-    } 
-    return 'error';
+            answer = divide(num1, num2);
+            break;
+    }
+    console.log(`Post calculation ans: ${answer}`)
+    if (answer === NaN) return 'error';
+    if (!(Number.isInteger(answer))) {
+        console.log(`Before rounded answer: ${answer}`)
+        decimalCount = 8 - (Math.floor(answer).toString().length + 1);
+        answer = answer.toFixed(decimalCount);
+    }
+    console.log(`After rounded answer: ${answer}`)
+    if (answer.toString().length >= 9) return 'too large';
+    return answer;
 }
 
 function updateDisplay(numString) {
+    if (display.textContent.length >= 9) return;
     display.textContent = parseFloat(display.textContent + numString).toString();
 }
 
@@ -59,6 +74,7 @@ const operator_buttons = document.querySelectorAll('.operator');
 const solve_button = document.querySelector('#solve');
 const decimal_button = document.querySelector('#decimal');
 const negative_button = document.querySelector('#neg');
+const previous_answer_button = document.querySelector('#ans');
 
 num_buttons.forEach((button) => {
     button.addEventListener('click', () => {
@@ -115,4 +131,8 @@ negative_button.addEventListener('click', () => {
     } else {
         display.textContent = display.textContent.slice(1);
     }
+})
+
+previous_answer_button.addEventListener('click', () => {
+    display.textContent = answer;
 })
