@@ -89,5 +89,5 @@ button {
     justify-content: center;
     align-items: center;
     gap: 24px;
-
+    padding: 4px;
 }
