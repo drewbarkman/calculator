@@ -31,14 +31,14 @@ function operate(num1, operator, num2) {
             answer = divide(num1, num2);
             break;
     }
-    console.log(`Post calculation ans: ${answer}`)
+    // console.log(`Post calculation ans: ${answer}`)
     if (answer === NaN) return 'error';
     if (!(Number.isInteger(answer))) {
-        console.log(`Before rounded answer: ${answer}`)
+        // console.log(`Before rounded answer: ${answer}`)
         decimalCount = 8 - (Math.floor(answer).toString().length + 1);
         answer = answer.toFixed(decimalCount);
     }
-    console.log(`After rounded answer: ${answer}`)
+    // console.log(`After rounded answer: ${answer}`)
     if (answer.toString().length >= 9) return 'too large';
     return answer;
 }
@@ -75,6 +75,7 @@ const solve_button = document.querySelector('#solve');
 const decimal_button = document.querySelector('#decimal');
 const negative_button = document.querySelector('#neg');
 const previous_answer_button = document.querySelector('#ans');
+const backspace_button = document.querySelector('#backspace');
 
 num_buttons.forEach((button) => {
     button.addEventListener('click', () => {
@@ -134,5 +135,11 @@ negative_button.addEventListener('click', () => {
 })
 
 previous_answer_button.addEventListener('click', () => {
-    display.textContent = answer;
+    if (answer !== '') {
+        display.textContent = answer;
+    }
+})
+
+backspace_button.addEventListener('click', () => {
+    display.textContent = display.textContent.slice(0, -1);
 })
