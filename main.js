@@ -11,7 +11,7 @@ function multiply(a, b) {
 }
 
 function divide(a, b) {
-    if (b === 0) return 'bruh...';
+    if (b === 0) return 'error';
     return a / b;
 }
 
@@ -32,10 +32,10 @@ function operate(num1, operator, num2) {
             break;
     }
     // console.log(`Post calculation ans: ${answer}`)
-    if (answer === NaN) return 'error';
+    if (Number.isNaN(answer)) return 'error';
     if (!(Number.isInteger(answer))) {
         // console.log(`Before rounded answer: ${answer}`)
-        decimalCount = 8 - (Math.floor(answer).toString().length + 1);
+        let decimalCount = 8 - (Math.floor(answer).toString().length + 1);
         answer = answer.toFixed(decimalCount);
     }
     // console.log(`After rounded answer: ${answer}`)
@@ -44,6 +44,8 @@ function operate(num1, operator, num2) {
 }
 
 function updateDisplay(numString) {
+    if (clear) clearDisplay();
+    clear = false;
     if (display.textContent.length >= 9) return;
     display.textContent = parseFloat(display.textContent + numString).toString();
 }
@@ -59,6 +61,26 @@ function checkForSelected(nodeList, className) {
         }
     }
     return false;
+}
+
+function operatorPressed(button) {
+    if (!checkForSelected(operator_buttons, 'selected')) {
+            num1 = parseFloat(display.textContent);
+            operator = button.textContent;
+            button.classList.add('selected');
+            clear = true;
+        } else {
+            num2 = parseFloat(display.textContent);
+            // console.log(num1, operator, num2);
+            answer = operate(num1, operator, num2);
+            operator_buttons.forEach((button) => {button.classList.remove('selected')})
+            display.textContent = num1 = answer;
+
+            operator = num2 = '';
+            operator = button.textContent;
+            button.classList.add('selected');
+            clear = true;
+        }
 }
 
 let operator = '';
@@ -79,8 +101,6 @@ const backspace_button = document.querySelector('#backspace');
 
 num_buttons.forEach((button) => {
     button.addEventListener('click', () => {
-        if (clear) clearDisplay();
-        clear = false;
         updateDisplay(button.textContent);
     })
 });
@@ -92,25 +112,7 @@ clear_button.addEventListener('click', () => {
 });
 
 operator_buttons.forEach((button) => {
-    button.addEventListener('click', () => {
-        if (!checkForSelected(operator_buttons, 'selected')) {
-            num1 = parseFloat(display.textContent);
-            operator = button.textContent;
-            button.classList.add('selected');
-            clear = true;
-        } else {
-            num2 = parseFloat(display.textContent);
-            // console.log(num1, operator, num2);
-            answer = operate(num1, operator, num2);
-            operator_buttons.forEach((button) => {button.classList.remove('selected')})
-            display.textContent = num1 = answer;
-
-            operator = num2 = '';
-            operator = button.textContent;
-            button.classList.add('selected');
-            clear = true;
-        }
-    });
+    button.addEventListener('click', () => operatorPressed(button));
 });
 
 solve_button.addEventListener('click', () => {
@@ -143,3 +145,41 @@ previous_answer_button.addEventListener('click', () => {
 backspace_button.addEventListener('click', () => {
     display.textContent = display.textContent.slice(0, -1);
 })
+
+const NUMBERS = '1234567890'
+const OPERATORS = '+-x/*÷–'
+
+document.addEventListener('keydown', (event) => {
+    console.log(event.key);
+    if (NUMBERS.includes(event.key)) {
+        updateDisplay(event.key)
+    } else if (OPERATORS.includes(event.key)) {
+        let operatorEquiv = '';
+        switch(event.key) {
+            case '/':
+                operatorEquiv = '÷';
+                break;
+            case '*':
+                operatorEquiv = 'x';
+                break;
+            case '-':
+                operatorEquiv = '–';
+                break;
+            default:
+                operatorEquiv = event.key;
+        }
+
+        const matchedButton = [...operator_buttons].find((button) => button.textContent === operatorEquiv);
+        operatorPressed(matchedButton);
+    } else if (event.key === 'Enter' || event.key === '=') {
+        num2 = parseFloat(display.textContent);
+        answer = operate(num1, operator, num2);
+        operator_buttons.forEach((button) => {button.classList.remove('selected')})
+        display.textContent = answer;
+        clear = true;
+    } else if (event.key === 'Backspace') {
+        display.textContent = display.textContent.slice(0, -1);
+    } else if (event.key === '.') {
+        if (!(display.textContent.includes('.'))) display.textContent += '.';
+    }
+});

@@ -14,7 +14,8 @@ body {
     align-items: center;
     /* background-color: gainsboro; */
     border: 8px solid black;
-    padding: 4px;
+    padding: 24px;
+    border-radius: 16px;
     gap: 8px;
 }
 
